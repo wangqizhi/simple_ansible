@@ -11,25 +11,27 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
-
-class ConfigAttribute(object):
-
-    def __init__(self, name):
-        print('in init')
-        self.__name__ = name
-
-    def __get__(self, obj, type=None):
-        print(obj)
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        return rv
-
-    def __set__(self, obj, value):
-        print(' in set')
-        obj.config[self.__name__] = value
+import ConfigParser
 
 
-class Config(object):
-    def __init__(self):
-        print('init Config!')
+class Config(dict):
+
+    def __init__(self, defaults=None):
+        self.defaults = defaults
+        dict.__init__(self, defaults or {})
+
+    def __repr__(self):
+        return 'Config:{}'.format(str(self.defaults))
+
+    def from_ini(self):
+        try:
+            cp = ConfigParser.ConfigParser()
+            # TODO: vars local_config need in one file
+            cp.read('local_config')
+            self['username'] = cp.get('base', 'username')
+            self['password'] = cp.get('base', 'password')
+            self['become_user'] = cp.get('base', 'become_user')
+        except IOError as e:
+            pass
+        return True
+
