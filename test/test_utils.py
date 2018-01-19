@@ -18,7 +18,7 @@ from spla.utils import EasyPassword
 
 
 def test_easy_password():
-    key = '1234567890123456'
+    key = '1234'
     ep = EasyPassword(key)
     value = '1234567890123456'
     secret = ep.create(value)

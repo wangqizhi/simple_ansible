@@ -32,8 +32,12 @@ class EasyPassword(object):
         mode = self.mode
         if mode == 'easy':
             obj = AES.new(self.key, AES.MODE_CBC, b'0'*16)
-            o = b2a_hex(obj.encrypt(content))
-            return o
+            if len(content) < 16 :
+                print(content+b'0'*(16-len(content)))
+                o = b2a_hex(obj.encrypt(content+b'0'*(16-len(content))))
+                return o
+            else:
+                return ''
         else:
             # todo: other mode
             pass
