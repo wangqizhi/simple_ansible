@@ -13,12 +13,16 @@ from __future__ import (absolute_import, division, print_function)
 
 import ConfigParser
 
+from spla.contents import LC
+
 
 class Config(dict):
 
     def __init__(self, defaults=None):
         self.defaults = defaults
-        dict.__init__(self, defaults or {})
+        if not defaults:
+            self.defaults = self.from_ini()
+        # dict.__init__(self, defaults or {})
 
     def __repr__(self):
         return 'Config:{}'.format(str(self.defaults))
@@ -27,11 +31,11 @@ class Config(dict):
         try:
             cp = ConfigParser.ConfigParser()
             # TODO: vars local_config need in one file
-            cp.read('local_config')
-            self['username'] = cp.get('base', 'username')
-            self['password'] = cp.get('base', 'password')
-            self['become_user'] = cp.get('base', 'become_user')
+            cp.read(LC['CONFIG_FROM'])
+            for i, j in cp.items('base'):
+                self[i] = cp.get('base', i)
         except IOError as e:
-            pass
-        return True
-
+            # TODO: define Exception
+            print(e)
+            raise
+        return cp

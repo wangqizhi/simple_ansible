@@ -17,6 +17,7 @@ import os
 
 from spla.config import Config
 from spla.utils import EasyPassword
+from spla.spla import Spla
 
 
 def pre_work():
@@ -50,12 +51,14 @@ def pre_work():
             print('Write key file failed!')
             raise
     config = Config()
-    config.from_ini()
-    username = config['username']
+    # config.from_ini()
+    username = config['remote_user']
     become_user = config['become_user']
     ep = EasyPassword(key)
     sec_pwd = config['password']
     password = ep.get_value(sec_pwd)
+    spla = Spla()
+    print(spla.get_options())
     return username, become_user, password
 
 

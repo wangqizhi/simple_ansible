@@ -9,19 +9,14 @@
 
     :copyright: (c) 2018 by wqz
 """
+
 from __future__ import (absolute_import, division, print_function)
 
+import pytest
 import sys
 sys.path.append("./")
 
-from spla.utils import EasyPassword
+from spla.spla import Spla
 
-
-def test_easy_password():
-    key = '12345'
-    ep = EasyPassword(key)
-    value = '1234567890123456'
-    secret = ep.create(value)
-    print(secret)
-    print(ep.get_value(secret))
-    assert value == ep.get_value(secret)
+def test_Spla():
+    spla = Spla()
