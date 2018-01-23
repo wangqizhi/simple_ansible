@@ -114,8 +114,8 @@ class Spla(object):
         return Play().load(self.play_source, variable_manager=self.variable_manager, loader=self.loader)
 
     def tqm_run(self):
-        # 关闭host_key检查
-        # 下个版本中这个方法会由在option中设置host_key_checking为false替代
+        # close host_key check
+        # next version need set host_key_checking=False in option
         C.HOST_KEY_CHECKING = False
         try:
             _tqm = TaskQueueManager(
