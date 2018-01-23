@@ -6,3 +6,4 @@
 .python-version
 .secret_config
 local_config
+local_host
