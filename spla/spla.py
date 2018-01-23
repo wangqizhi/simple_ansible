@@ -117,7 +117,6 @@ class Spla(object):
         # 关闭host_key检查
         # 下个版本中这个方法会由在option中设置host_key_checking为false替代
         C.HOST_KEY_CHECKING = False
-        self._play()
         try:
             _tqm = TaskQueueManager(
                 inventory=self.inventory,
