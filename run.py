@@ -18,6 +18,7 @@ import os
 from spla.config import Config
 from spla.utils import EasyPassword
 
+
 def pre_work():
     """准备工作
 
@@ -38,12 +39,10 @@ def pre_work():
             with open('.secret_config', 'w') as sec_file:
                 # TODO: py3 support
                 key = str(raw_input('>> '))
-                if len(key) == 16:
+                if len(key) <= 16:
                     sec_file.write(key)
-                elif len(key) < 16:
-                    add = 16 - len(key)
-                    sec_file.write(key+'\0'*add)
                 else:
+                    # TODO: define Exception
                     raise
 
         except IOError as e:

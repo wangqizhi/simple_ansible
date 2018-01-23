@@ -18,10 +18,12 @@ from spla.utils import EasyPassword
 
 
 def test_easy_password():
-    key = '1234'
+    key = '12345'
     ep = EasyPassword(key)
     value = '1234567890123456'
     secret = ep.create(value)
+    print(secret)
+    print(ep.get_value(secret))
     assert value == ep.get_value(secret)
 
 if __name__ == '__main__':

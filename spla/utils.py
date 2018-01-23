@@ -15,31 +15,42 @@ import base64
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 
+
 class EasyPassword(object):
-    """Easy password encode/decode
-    
+    """ Easy password encode/decode 
+        
     """
     def __init__(self, key):
-        self.key = key
+        if len(key) == 16:
+            self.key = key
+        elif 16 > len(key) > 0:
+            self.key = key + b'0'*(16 - len(key))
+        else:
+            # TODO: define Exception
+            print('key value Error!')
+            raise
         self.mode = 'easy'
 
     def _encrypt_fun(self, content):
         """encrypt
-        
         :param content: content: encrypt content
         :return: string: 
         """
+
         mode = self.mode
         if mode == 'easy':
             obj = AES.new(self.key, AES.MODE_CBC, b'0'*16)
-            if len(content) < 16 :
-                print(content+b'0'*(16-len(content)))
-                o = b2a_hex(obj.encrypt(content+b'0'*(16-len(content))))
+            if len(content) == 16:
+                o = b2a_hex(obj.encrypt(content))
+                return o
+            elif 16 > len(content) > 0:
+                o = b2a_hex(obj.encrypt(content+b' '*(16-len(content))))
                 return o
             else:
                 return ''
         else:
-            # todo: other mode
+            # TODO: other mode
+            print()
             pass
 
     def _decode_fun(self, secret):
@@ -53,7 +64,7 @@ class EasyPassword(object):
             if mode == 'easy':
                 obj = AES.new(self.key, AES.MODE_CBC, b'0'*16)
                 o = obj.decrypt(a2b_hex(secret))
-                return o
+                return o.rstrip()
             else:
                 # TODO: other mode
                 pass
