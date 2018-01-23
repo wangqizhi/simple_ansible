@@ -119,7 +119,7 @@ class Spla(object):
         C.HOST_KEY_CHECKING = False
         self._play()
         try:
-            tqm = TaskQueueManager(
+            _tqm = TaskQueueManager(
                 inventory=self.inventory,
                 variable_manager=self.variable_manager,
                 loader=self.loader,
@@ -127,10 +127,10 @@ class Spla(object):
                 passwords=self._get_password(),
                 stdout_callback=self.results_callback,
             )
-            tqm.run(self._play())
+            _tqm.run(self._play())
         finally:
-            if tqm is not None:
-                tqm.cleanup()
+            if _tqm is not None:
+                _tqm.cleanup()
 
     def _get_password(self):
         if os.path.exists('.secret_config'):

@@ -9,15 +9,9 @@
 
     :copyright: (c) 2018 by wqz
 """
-
 from __future__ import (absolute_import, division, print_function)
 
-import os
-# import getpass
-from optparse import OptionParser
 
-from spla.config import Config
-from spla.utils import EasyPassword
 from spla.spla import Spla
 
 
@@ -27,6 +21,48 @@ def pre_work():
     :return: 
     """
     pass
+
+
+def modify_file_header():
+    """modify file header
+    
+    :return: 
+    """
+    file_raw = []
+    try:
+        # TODO: get filename
+        with open('run.py', 'r') as f:
+            for i in f:
+                file_raw.append(i)
+    except IOError:
+        pass
+    try:
+        n = 0
+        # TODO: replace text as args
+        replace_text = '''#!/bin/python
+# _*_ coding:utf-8 _*_
+
+"""
+    simple-ansible
+
+    A simple Ansible-api example
+    TODO: simple ui base flask
+
+    :copyright: (c) 2018 by wqz
+"""
+'''
+        # TODO: get filename
+        with open('run_copy.py', 'w') as f_copy:
+            f_copy.write(replace_text)
+            for i in file_raw:
+                n += 1
+                # TODO: start number as args
+                # replace start before line:12
+                if n > 11:
+                    f_copy.write(i)
+    except IOError:
+        pass
+
 
 def run():
     """Main
@@ -38,3 +74,4 @@ def run():
 
 if __name__ == '__main__':
     run()
+    # modify_file_header()

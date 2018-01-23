@@ -9,7 +9,6 @@
 
     :copyright: (c) 2018 by wqz
 """
-
 from __future__ import (absolute_import, division, print_function)
 
 import pytest
@@ -20,3 +19,4 @@ from spla.spla import Spla
 
 def test_Spla():
     spla = Spla()
+    spla.tqm_run()
