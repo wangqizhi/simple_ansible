@@ -1,5 +1,7 @@
 .idea
 .idea/*
+.cache
+.cache/*
 *.pyc
 .python-version
 .secret_config
