@@ -2,6 +2,7 @@
 .idea/*
 .cache
 .cache/*
+.DS_Store
 *.pyc
 .python-version
 .secret_config

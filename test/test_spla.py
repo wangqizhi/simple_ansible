@@ -17,6 +17,7 @@ sys.path.append("./")
 
 from spla.spla import Spla
 
-def test_Spla():
+
+def test_spla():
     spla = Spla()
     spla.tqm_run()

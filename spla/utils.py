@@ -28,7 +28,7 @@ class EasyPassword(object):
         else:
             # TODO: define Exception
             print('key value Error!')
-            raise
+            raise KeyError
         self.mode = 'easy'
 
     def _encrypt_fun(self, content):

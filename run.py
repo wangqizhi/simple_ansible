@@ -69,7 +69,15 @@ def run():
 
     """
     spla = Spla()
-    spla.tqm_run()
+    play_source = dict(
+        name='test',
+        hosts='10.21.67.90',
+    )
+    spla.set_play_source(play_source)
+    task=dict(action=dict(module='ping'))
+    spla.add_task(task)
+    r = spla.tqm_run()
+    print(r)
 
 
 if __name__ == '__main__':

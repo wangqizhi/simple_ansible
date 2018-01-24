@@ -27,6 +27,24 @@ from spla.contents import LC
 from spla.utils import EasyPassword
 
 
+class ResultCallback(CallbackBase):
+    def __init__(self, result):
+        super(ResultCallback, self).__init__()
+        self.result = result
+    
+    # callback when task execute
+    def v2_runner_on_ok(self, result, **kwargs):
+        self.result['tasks_run'].append(result._host)
+
+    # callback when task failed
+    def v2_runner_on_failed(self, result, ignore_errors=False):
+        self.result['tasks_failed'].append(result._host)
+
+    # callback when task unreachable
+    def v2_runner_on_unreachable(self, result):
+        self.result['tasks_unreachable'].append(result._host)
+
+
 class Spla(object):
     """
     spla = Spla()
@@ -34,8 +52,7 @@ class Spla(object):
     """
     def __init__(self):
         self.tasks = []
-        self.tasks_run = []
-        self.tasks_failed = []
+        self.results = dict(tasks_run=[], tasks_failed=[], tasks_unreachable=[])
         # counter
         self._JS = 0
         self.config = Config()
@@ -96,7 +113,7 @@ class Spla(object):
             gather_facts='no',
             tasks=self.tasks
         )
-        self.results_callback = object  # TODO: build callback
+        self.results_callback = ResultCallback(self.results)  # TODO: build callback
 
     def get_options(self):
         """
@@ -104,6 +121,15 @@ class Spla(object):
         :return: options
         """
         return self.options
+
+    def set_play_source(self, play_source):
+        # TODO: check play_source
+        for i in play_source:
+            self.play_source[i] = play_source[i]
+
+    def add_task(self, task=dict):
+        # TODO: check task
+        self.tasks.append(task)
 
     def _play(self):
         """
@@ -117,19 +143,22 @@ class Spla(object):
         # close host_key check
         # next version need set host_key_checking=False in option
         C.HOST_KEY_CHECKING = False
+        # TODO: now become_pass same as conn_pass ,need get from other become_pass
+        _passwords = dict(conn_pass=self._get_password(), become_pass=self._get_password())
         try:
             _tqm = TaskQueueManager(
                 inventory=self.inventory,
                 variable_manager=self.variable_manager,
                 loader=self.loader,
                 options=self.options,
-                passwords=self._get_password(),
+                passwords=_passwords,
                 stdout_callback=self.results_callback,
             )
             _tqm.run(self._play())
         finally:
             if _tqm is not None:
                 _tqm.cleanup()
+        return self.results
 
     def _get_password(self):
         if os.path.exists('.secret_config'):
@@ -150,7 +179,7 @@ class Spla(object):
                         sec_file.write(key)
                     else:
                         # TODO: define Exception
-                        raise
+                        raise KeyError
             except IOError as e:
                 print(e)
                 print('Write key file failed!')
@@ -158,3 +187,6 @@ class Spla(object):
         ep = EasyPassword(key)
         sec_pwd = self.config['password']
         return ep.get_value(sec_pwd)
+
+    def get_result(self):
+        return self.results
