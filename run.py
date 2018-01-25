@@ -11,6 +11,7 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
+import argparse
 
 from spla.spla import Spla
 
@@ -64,22 +65,32 @@ def modify_file_header():
         pass
 
 
-def run():
+def run(host, name):
     """Main
 
     """
+    if not name:
+        name = 'Spla gogo!'
     spla = Spla()
     play_source = dict(
-        name='test',
-        hosts='10.21.67.90',
+        name=name,
+        hosts=host,
     )
     spla.set_play_source(play_source)
-    task=dict(action=dict(module='ping'))
+    task = dict(action=dict(module='ping'))
     spla.add_task(task)
     r = spla.tqm_run()
     print(r)
 
 
 if __name__ == '__main__':
-    run()
-    # modify_file_header()
+    parser = argparse.ArgumentParser(description='Spla: easy to use')
+    parser.add_argument('-a', '--host', dest='host', help='play source host')
+    parser.add_argument('-n', '--name', dest='name', help='play source name')
+    parser.add_argument('--modify', dest='modify', help='modify file header')
+    args = parser.parse_args()
+    if args.modify:
+        # TODO: add file mode
+        modify_file_header()
+    if args.host:
+        run(args.host, args.name)
