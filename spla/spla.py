@@ -28,21 +28,31 @@ from spla.utils import EasyPassword
 
 
 class ResultCallback(CallbackBase):
-    def __init__(self, result):
+    def __init__(self, result, info=False):
         super(ResultCallback, self).__init__()
         self.result = result
+        self.info = info
     
     # callback when task execute
     def v2_runner_on_ok(self, result, **kwargs):
         self.result['tasks_run'].append(result._host)
+        self.result['tasks_result'][result._host] = result._result
 
     # callback when task failed
     def v2_runner_on_failed(self, result, ignore_errors=False):
         self.result['tasks_failed'].append(result._host)
+        self.result['tasks_result'][result._host] = result._result
 
     # callback when task unreachable
     def v2_runner_on_unreachable(self, result):
         self.result['tasks_unreachable'].append(result._host)
+        self.result['tasks_result'][result._host] = result._result
+
+    # callback anytime
+    def v2_on_any(self, *args, **kwargs):
+        # TODO: record in file
+        if self.info:
+            print(args)
 
 
 class Spla(object):
@@ -52,9 +62,9 @@ class Spla(object):
     """
     def __init__(self):
         self.tasks = []
-        self.results = dict(tasks_run=[], tasks_failed=[], tasks_unreachable=[])
+        self.results = dict(tasks_run=[], tasks_failed=[], tasks_unreachable=[], tasks_result=dict())
         # counter
-        self._JS = 0
+        # self._JS = 0
         self.config = Config()
         _options = namedtuple('Options',
                               ['connection',  # connection types: smart,ssh,paramiko...
@@ -132,7 +142,7 @@ class Spla(object):
         self.tasks.append(task)
 
     def _play(self):
-        """
+        """load play_source
         
         :return: play
         """
