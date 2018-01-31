@@ -77,8 +77,9 @@ def run(host, name):
         hosts=host,
     )
     spla.set_play_source(play_source)
-    task = dict(action=dict(module='ping'))
-    spla.add_task(task)
+    # task = dict(action=dict(module='ping'))
+    # spla.add_task(task)
+    spla.add_module()
     r = spla.tqm_run()
     print(r)
 

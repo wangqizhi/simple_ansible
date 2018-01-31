@@ -25,6 +25,7 @@ from ansible import constants as C
 from spla.config import Config
 from spla.contents import LC
 from spla.utils import EasyPassword
+from spla.module import TaskModule
 
 
 class ResultCallback(CallbackBase):
@@ -84,7 +85,6 @@ class Spla(object):
         # defaults args
         _defaults = dict(
             connection='smart',
-            remote_user='root',
             module_path=None,
             forks=100,
             become=True,
@@ -92,6 +92,7 @@ class Spla(object):
             become_user='root',
             check=False,
             diff=False,
+            remote_user='root',
             ssh_common_args=None,
             private_key_file=None,
             verbosity=4,
@@ -139,7 +140,20 @@ class Spla(object):
 
     def add_task(self, task=dict):
         # TODO: check task
-        self.tasks.append(task)
+        if isinstance(task, list):
+            for i in task:
+                self.tasks.append(i)
+        else:
+            self.tasks.append(task)
+
+    def add_module(self, module_name='ping'):
+        """ add task by spla defined
+
+        :return:
+        """
+        task = TaskModule(module_name).load()
+        tasks = task().get_task()
+        self.add_task(tasks)
 
     def _play(self):
         """load play_source

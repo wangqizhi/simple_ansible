@@ -11,7 +11,6 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
-import base64
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 
