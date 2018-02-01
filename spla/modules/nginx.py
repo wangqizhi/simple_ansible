@@ -11,10 +11,12 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
+from spla.modules import BaseModule
 
-class NginxModule(object):
+
+class NginxModule(BaseModule):
     def __init__(self, tasks):
-        self.tasks = tasks
+        super(NginxModule, self).__init__(tasks)
 
     def get_task(self):
         return self.tasks

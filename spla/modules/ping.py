@@ -17,5 +17,6 @@ from spla.modules import BaseModule
 class PingModule(BaseModule):
     def __init__(self, tasks):
         super(PingModule, self).__init__(tasks)
+
     def ping(self):
         self.tasks.append(dict(action=dict(module='ping')))
