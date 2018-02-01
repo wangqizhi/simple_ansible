@@ -124,7 +124,7 @@ class Spla(object):
             gather_facts='no',
             tasks=self.tasks
         )
-        self.results_callback = ResultCallback(self.results)  # TODO: build callback
+        self.results_callback = ResultCallback(self.results)
 
     def get_options(self):
         """
@@ -146,14 +146,18 @@ class Spla(object):
         else:
             self.tasks.append(task)
 
-    def add_module(self, module_name='ping'):
-        """ add task by spla defined
+    def clear_task(self):
+        """clear task list
 
-        :return:
         """
-        task = TaskModule(module_name).load()
-        tasks = task().get_task()
-        self.add_task(tasks)
+        self.tasks = []
+
+    def get_module(self, module_name='ping'):
+        """ get module by spla defined
+
+        :return: instance
+        """
+        return TaskModule(module_name, self.tasks).load()
 
     def _play(self):
         """load play_source

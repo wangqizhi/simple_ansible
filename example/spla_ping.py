@@ -11,10 +11,8 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
+import sys
+sys.path.append("./")
+from spla.spla import Spla
 
-class BaseModule(object):
-    def __init__(self, tasks):
-        self.tasks = tasks
-
-    def get_tasks(self):
-        return self.tasks
+print('hhh')

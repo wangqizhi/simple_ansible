@@ -11,13 +11,11 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
+from spla.modules import BaseModule
 
-class PingModule(object):
-    def __init__(self):
-        """
-        default module :ping
-        """
-        pass
 
-    def get_task(self):
-        return dict(action=dict(module='ping'))
+class PingModule(BaseModule):
+    def __init__(self, tasks):
+        super(PingModule, self).__init__(tasks)
+    def ping(self):
+        self.tasks.append(dict(action=dict(module='ping')))

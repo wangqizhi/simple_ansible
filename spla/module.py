@@ -18,12 +18,12 @@ class TaskModule(object):
     """
     Create tasks by module
     """
-    def __init__(self, module_name):
+    def __init__(self, module_name, tasks):
         self.module_name = module_name
-        self.tasks = []
+        self.tasks = tasks
         module = importlib.import_module('spla.modules.'+module_name)
         # TODO: try except
         self.obj = getattr(module, module_name.capitalize()+'Module')
 
     def load(self):
-        return self.obj
+        return self.obj(self.tasks)

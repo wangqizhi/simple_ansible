@@ -18,8 +18,7 @@ from spla.spla import Spla
 
 def pre_work():
     """ready for start
-
-    :return: 
+    pass
     """
     pass
 
@@ -27,7 +26,6 @@ def pre_work():
 def modify_file_header():
     """modify file header
     
-    :return: 
     """
     file_raw = []
     try:
@@ -66,8 +64,8 @@ def modify_file_header():
 
 
 def run(host, name):
-    """Main
-
+    """run a simple ping example
+    python run.py -a HOST
     """
     if not name:
         name = 'Spla gogo!'
@@ -79,7 +77,8 @@ def run(host, name):
     spla.set_play_source(play_source)
     # task = dict(action=dict(module='ping'))
     # spla.add_task(task)
-    spla.add_module()
+    ping_module = spla.get_module()
+    ping_module.ping()
     r = spla.tqm_run()
     print(r)
 
