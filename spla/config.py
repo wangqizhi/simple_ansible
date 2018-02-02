@@ -11,6 +11,7 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
+# TODO: py3 support: replace ConfigParser
 import ConfigParser
 import os
 
@@ -35,8 +36,12 @@ class Config(dict):
             _config = LC['CONFIG_FROM']
             if os.path.exists(_config):
                 cp.read(_config)
-                for i, j in cp.items('base'):
+                # read ansible base config from local_config
+                for i, _ in cp.items('base'):
                     self[i] = cp.get('base', i)
+                if 'self' in cp.sections():
+                    for i, _ in cp.items('self'):
+                        LC['SELF_CONFIG'][i] = cp.get('self', i)
             else:
                 print("Error: Please create file: " + _config)
         except IOError as e:

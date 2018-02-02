@@ -13,6 +13,8 @@ from __future__ import (absolute_import, division, print_function)
 
 
 LC = dict(
+    # spla config from local_config
+    SELF_CONFIG=dict(),
     # spla secret key
     SECRET_KEY='/etc/spla/.secret_config',
     # spla config file
