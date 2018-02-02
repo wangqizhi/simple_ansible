@@ -16,7 +16,7 @@ from spla.spla import Spla
 
 def run(host, name):
     """run a simple ping example
-    python run.py -a HOST
+
     """
     if not name:
         name = 'Spla gogo!'
@@ -33,4 +33,4 @@ def run(host, name):
 
 
 if __name__ == '__main__':
-    run('10.21.67.90', 'spla gogo!')
+    run('test', 'spla!')
