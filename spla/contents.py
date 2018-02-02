@@ -13,8 +13,10 @@ from __future__ import (absolute_import, division, print_function)
 
 
 LC = dict(
+    # spla secret key
+    SECRET_KEY='/etc/spla/.secret_config',
     # spla config file
-    CONFIG_FROM='local_config',
+    CONFIG_FROM='/etc/spla/local_config',
     # ansible host file
-    HOSTS_FILES=['local_host'],
+    HOSTS_FILES=['/etc/spla/local_host'],
 )

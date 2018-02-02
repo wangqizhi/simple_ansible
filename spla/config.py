@@ -12,6 +12,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 import ConfigParser
+import os
 
 from spla.contents import LC
 
@@ -31,9 +32,13 @@ class Config(dict):
         try:
             cp = ConfigParser.ConfigParser()
             # TODO: vars local_config need in one file
-            cp.read(LC['CONFIG_FROM'])
-            for i, j in cp.items('base'):
-                self[i] = cp.get('base', i)
+            _config = LC['CONFIG_FROM']
+            if os.path.exists(_config):
+                cp.read(_config)
+                for i, j in cp.items('base'):
+                    self[i] = cp.get('base', i)
+            else:
+                print("Error: Please create file: " + _config)
         except IOError as e:
             # TODO: define Exception
             print(e)

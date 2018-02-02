@@ -13,4 +13,24 @@ from __future__ import (absolute_import, division, print_function)
 
 from spla.spla import Spla
 
-print('hhh')
+
+def run(host, name):
+    """run a simple ping example
+    python run.py -a HOST
+    """
+    if not name:
+        name = 'Spla gogo!'
+    spla = Spla()
+    play_source = dict(
+        name=name,
+        hosts=host,
+    )
+    spla.set_play_source(play_source)
+    ping_module = spla.get_module()
+    ping_module.ping()
+    r = spla.tqm_run()
+    print(r)
+
+
+if __name__ == '__main__':
+    run('10.21.67.90', 'spla gogo!')

@@ -27,6 +27,8 @@ from spla.contents import LC
 from spla.utils import EasyPassword
 from spla.module import TaskModule
 
+__version__ = "0.1a"
+
 
 class ResultCallback(CallbackBase):
     def __init__(self, result, info=False):
@@ -189,9 +191,10 @@ class Spla(object):
         return self.results
 
     def _get_password(self):
-        if os.path.exists('.secret_config'):
+        _secret_config = LC['SECRET_KEY']
+        if os.path.exists(_secret_config):
             try:
-                with open('.secret_config', 'r') as sec_file:
+                with open(_secret_config, 'r') as sec_file:
                     # TODO: py3 support
                     key = sec_file.read()
             except IOError as e:
@@ -200,9 +203,9 @@ class Spla(object):
                 raise
         else:
             try:
-                with open('.secret_config', 'w') as sec_file:
+                with open(_secret_config, 'w') as sec_file:
                     # TODO: py3 support
-                    key = str(raw_input('>> '))
+                    key = str(raw_input('Enter key>> '))
                     if len(key) <= 16:
                         sec_file.write(key)
                     else:
