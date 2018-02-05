@@ -39,6 +39,7 @@ class Config(dict):
                 # read ansible base config from local_config
                 for i, _ in cp.items('base'):
                     self[i] = cp.get('base', i)
+                # refresh LC from local_config 'self'
                 if 'self' in cp.sections():
                     for i, _ in cp.items('self'):
                         LC['SELF_CONFIG'][i] = cp.get('self', i)
