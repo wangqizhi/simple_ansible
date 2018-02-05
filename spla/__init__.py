@@ -11,4 +11,5 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
-pass
+
+__version__ = "0.1a"
