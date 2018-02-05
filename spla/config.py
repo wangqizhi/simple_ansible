@@ -15,7 +15,7 @@ from __future__ import (absolute_import, division, print_function)
 import ConfigParser
 import os
 
-from spla.contents import LC
+from .contents import LC
 
 
 class Config(dict):

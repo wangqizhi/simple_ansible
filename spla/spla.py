@@ -22,10 +22,10 @@ from ansible.executor.task_queue_manager import TaskQueueManager
 from ansible.plugins.callback import CallbackBase
 from ansible import constants as C
 
-from spla.config import Config
-from spla.contents import LC
-from spla.utils import EasyPassword
-from spla.module import TaskModule
+from .config import Config
+from .contents import LC
+from .utils import EasyPassword
+from .module import TaskModule
 
 __version__ = "0.1a"
 

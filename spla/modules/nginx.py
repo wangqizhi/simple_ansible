@@ -11,7 +11,7 @@
 """
 from __future__ import (absolute_import, division, print_function)
 
-from spla.modules import BaseModule
+from ..modules import BaseModule
 
 
 class NginxModule(BaseModule):
