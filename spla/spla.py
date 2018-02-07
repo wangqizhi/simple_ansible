@@ -12,6 +12,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 import os
+import sys
 from collections import namedtuple
 
 from ansible.parsing.dataloader import DataLoader
@@ -19,6 +20,7 @@ from ansible.vars.manager import VariableManager
 from ansible.inventory.manager import InventoryManager
 from ansible.playbook.play import Play
 from ansible.executor.task_queue_manager import TaskQueueManager
+from ansible.executor.playbook_executor import PlaybookExecutor
 from ansible.plugins.callback import CallbackBase
 from ansible import constants as C
 
@@ -62,7 +64,8 @@ class Spla(object):
     spla = Spla()
     spla.tqm_run()
     """
-    def __init__(self):
+    def __init__(self, module=None):
+        self.module = module
         self.tasks = []
         self.results = dict(tasks_run=[], tasks_failed=[], tasks_unreachable=[], tasks_result=dict())
         # counter
@@ -82,6 +85,10 @@ class Spla(object):
                                'private_key_file',  # where private key
                                'verbosity',  # more information show
                                'host_key_checking',  # next version support for close host checking
+                               'listhosts',  # support PlaybookExecutor
+                               'listtasks',  # support PlaybookExecutor
+                               'listtags',  # support PlaybookExecutor
+                               'syntax',  # support PlaybookExecutor
                                ])
         # defaults args
         _defaults = dict(
@@ -115,6 +122,10 @@ class Spla(object):
             private_key_file=_defaults['private_key_file'],
             verbosity=_defaults['verbosity'],
             host_key_checking=_defaults['host_key_checking'],
+            listhosts=None,
+            listtasks=None,
+            listtags=None,
+            syntax=None,
         )
         self.loader = DataLoader()
         self.inventory = InventoryManager(loader=self.loader, sources=LC['HOSTS_FILES'])
@@ -187,10 +198,42 @@ class Spla(object):
                 passwords=_passwords,
                 stdout_callback=self.results_callback,
             )
-            _tqm.run(self._play())
+            # play-book module
+            if self.module == 'playbook':
+                try:
+                    filename = sys.argv[1]
+                    path = os.getcwd()
+                    if filename.startswith('/'):
+                        file = filename
+                    else:
+                        file = '/'.join([path, filename])
+                    if os.path.isfile(file):
+                        _pe = PlaybookExecutor(
+                            playbooks=[file],
+                            inventory=self.inventory,
+                            variable_manager = self.variable_manager,
+                            loader=self.loader,
+                            options=self.options,
+                            passwords=_passwords,
+                        )
+                        _pe._tqm = _tqm
+                        _pe.run()
+                    else:
+                        # TODO: use display from ansible
+                        print("ERROR: file not exist!")
+                        return False
+                except IndexError:
+                    # TODO: use display from ansible
+                    print("ERROR: playbook module need file name!")
+                    return False
+            else:
+                # tqm module
+                _tqm.run(self._play())
         finally:
             if _tqm is not None:
                 _tqm.cleanup()
+        # return callback result:
+        # self.results = dict(tasks_run=[], tasks_failed=[], tasks_unreachable=[], tasks_result=dict())
         return self.results
 
     def _get_password(self):

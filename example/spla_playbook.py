@@ -16,7 +16,7 @@ from spla.contents import LC
 
 
 def run(host, name):
-    """Example: nginx
+    """Example: play-book
 
     :param host: string
     :param name: string
@@ -24,17 +24,15 @@ def run(host, name):
     """
     if not name:
         name = 'Spla gogo!'
-    spla = Spla()
+    spla = Spla(module='playbook')
     play_source = dict(
         name=name,
         hosts=host,
     )
     spla.set_play_source(play_source)
-    nginx_module = spla.get_module('nginx')
-    nginx_module.download_config(LC['SELF_CONFIG']['nginx_config_local'], LC['SELF_CONFIG']['nginx_config_server'])
     r = spla.tqm_run()
     print(r)
 
 
 if __name__ == '__main__':
-    run('all', 'spla nginx!')
+    run('all', 'spla play-book!')
