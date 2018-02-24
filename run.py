@@ -92,6 +92,7 @@ if __name__ == '__main__':
     parser.add_argument('--modify', dest='modify', help='modify file header')
     parser.add_argument('--key', dest='key', help='secret key')
     args = parser.parse_args()
+    # example: python run.py --key 1234
     if args.key:
         password = getpass("Enter password>> ")
         ep = EasyPassword(args.key)
