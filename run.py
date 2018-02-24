@@ -12,8 +12,10 @@
 from __future__ import (absolute_import, division, print_function)
 
 import argparse
+from getpass import getpass
 
 from spla.spla import Spla
+from spla.utils import EasyPassword
 
 
 def pre_work():
@@ -88,7 +90,13 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--host', dest='host', help='play source host')
     parser.add_argument('-n', '--name', dest='name', help='play source name')
     parser.add_argument('--modify', dest='modify', help='modify file header')
+    parser.add_argument('--key', dest='key', help='secret key')
     args = parser.parse_args()
+    if args.key:
+        password = getpass("Enter password>> ")
+        ep = EasyPassword(args.key)
+        value = ep.create(password)
+        print("OUT==> " + value)
     if args.modify:
         # TODO: add file mode
         modify_file_header()

@@ -106,6 +106,7 @@ class Spla(object):
             verbosity=4,
             host_key_checking=False,
         )
+        # load from config file
         for i, j in self.config.items():
             _defaults[i] = j
         self.options = _options(
@@ -204,14 +205,14 @@ class Spla(object):
                     filename = sys.argv[1]
                     path = os.getcwd()
                     if filename.startswith('/'):
-                        file = filename
+                        f = filename
                     else:
-                        file = '/'.join([path, filename])
-                    if os.path.isfile(file):
+                        f = '/'.join([path, filename])
+                    if os.path.isfile(f):
                         _pe = PlaybookExecutor(
-                            playbooks=[file],
+                            playbooks=[f],
                             inventory=self.inventory,
-                            variable_manager = self.variable_manager,
+                            variable_manager=self.variable_manager,
                             loader=self.loader,
                             options=self.options,
                             passwords=_passwords,
@@ -245,7 +246,7 @@ class Spla(object):
                     key = sec_file.read()
             except IOError as e:
                 print(e)
-                print('Write key file failed!')
+                print('ERROR: Write key file failed!')
                 raise
         else:
             try:
@@ -259,7 +260,7 @@ class Spla(object):
                         raise KeyError
             except IOError as e:
                 print(e)
-                print('Write key file failed!')
+                print('ERROR: Write key file failed!')
                 raise
         ep = EasyPassword(key)
         sec_pwd = self.config['password']
