@@ -20,5 +20,5 @@ setup(
     author='wqz',
     author_email='wangqizhi1987@gmail.com',
     description='Ansible api example or maybe ui',
-    install_requires=['ansible'],
+    install_requires=['ansible', 'flask'],
 )

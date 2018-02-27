@@ -16,6 +16,7 @@ from getpass import getpass
 
 from spla.spla import Spla
 from spla.utils import EasyPassword
+from spla.web import web_run
 
 
 def pre_work():
@@ -91,7 +92,11 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--name', dest='name', help='play source name')
     parser.add_argument('--modify', dest='modify', help='modify file header')
     parser.add_argument('--key', dest='key', help='secret key')
+    parser.add_argument('--web', dest='web', help='start web')
     args = parser.parse_args()
+    if args.web:
+        if args.web == "debug" or args.web == "stage":
+            web_run(debug=args.web)
     # example: python run.py --key 1234
     if args.key:
         password = getpass("Enter password>> ")

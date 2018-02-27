@@ -268,3 +268,6 @@ class Spla(object):
 
     def get_result(self):
         return self.results
+
+    def show_hosts(self):
+        return self.inventory.hosts
