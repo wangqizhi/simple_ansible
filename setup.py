@@ -15,6 +15,7 @@ setup(
     name='spla',
     version='0.1a',
     packages=['spla', 'spla.modules'],
+    include_package_data=True,
     url='https://github.com/wangqizhi/spla',
     license='',
     author='wqz',
